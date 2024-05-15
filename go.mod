@@ -1,4 +1,4 @@
-module github.com/nyudlts/go-bagit
+module github.com/artefactual-labs/go-bagit
 
 go 1.21.4
 
