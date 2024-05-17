@@ -49,3 +49,80 @@ func TestCreateBagInfo(t *testing.T) {
 		},
 	})
 }
+
+func TestAddTags(t *testing.T) {
+	t.Parallel()
+
+	t.Run("Add tags to a tagset", func(t *testing.T) {
+		t.Parallel()
+
+		ts := TagSet{Tags: make(map[string]string)}
+		ts.AddTags(map[string]string{
+			"BagIt-Version":               "0.97",
+			"Tag-File-Character-Encoding": "UTF-8",
+		})
+
+		assert.DeepEqual(t, ts, TagSet{
+			Tags: map[string]string{
+				"BagIt-Version":               "0.97",
+				"Tag-File-Character-Encoding": "UTF-8",
+			},
+		})
+	})
+}
+
+func TestHasTag(t *testing.T) {
+	t.Parallel()
+
+	type test struct {
+		name string
+		key  string
+		want bool
+	}
+
+	for _, tt := range []test{
+		{
+			name: "Returns true when tag is found",
+			key:  "BagIt-Version",
+			want: true,
+		},
+		{
+			name: "Returns false when tag is not found",
+			key:  "foo",
+			want: false,
+		},
+	} {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ts := TagSet{
+				Tags: map[string]string{"BagIt-Version": "0.97"},
+			}
+			got := ts.HasTag(tt.key)
+
+			assert.Assert(t, got == tt.want)
+		})
+	}
+}
+
+func TestUpdateTagFile(t *testing.T) {
+	t.Run("Updates a tag in a tagset", func(t *testing.T) {
+		t.Parallel()
+
+		ts := TagSet{
+			Tags: map[string]string{
+				"BagIt-Version":               "0.97",
+				"Tag-File-Character-Encoding": "UTF-8",
+			},
+		}
+
+		ts.UpdateTagFile("BagIt-Version", "foo")
+		assert.DeepEqual(t, ts, TagSet{
+			Tags: map[string]string{
+				"BagIt-Version":               "foo",
+				"Tag-File-Character-Encoding": "UTF-8",
+			},
+		})
+	})
+}

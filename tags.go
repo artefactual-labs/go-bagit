@@ -61,7 +61,7 @@ func NewTagSet(filename string, bagLocation string) (TagSet, error) {
 
 func (tagSet TagSet) GetTagSetAsByteSlice() []byte {
 	keys := make([]string, 0)
-	for k, _ := range tagSet.Tags {
+	for k := range tagSet.Tags {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
@@ -122,7 +122,7 @@ func (tagset TagSet) AddTags(newTags map[string]string) {
 }
 
 func (tagSet TagSet) HasTag(key string) bool {
-	for k, _ := range tagSet.Tags {
+	for k := range tagSet.Tags {
 		if k == key {
 			return true
 		}
@@ -131,7 +131,7 @@ func (tagSet TagSet) HasTag(key string) bool {
 }
 
 func (tagSet TagSet) UpdateTagFile(key string, value string) {
-	for k, _ := range tagSet.Tags {
+	for k := range tagSet.Tags {
 		if k == key {
 			tagSet.Tags[k] = value
 		}
